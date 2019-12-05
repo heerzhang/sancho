@@ -1,3 +1,5 @@
+## 3.6.0
+- InputGroup 大幅度修改，支持自适应。
 ## 3.5.4
 
 - Update `Stack` to better support gestures.
