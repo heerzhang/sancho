@@ -13,6 +13,10 @@ import { IconAlertCircle, IconChevronDown } from "./Icons";
 import { safeBind } from "./Hooks/compose-bind";
 import { useMedia } from "use-media";
 
+/*
+自适应布局，容器父组件不应当设置width固定的px，否则内部组件元素{已经为屏幕宽度自适应适配的组件}都会被动拉伸宽度，失去了效果。
+*/
+
 const getInputSizes = (theme: Theme) => ({
   sm: css({
     fontSize: theme.fontSizes[0],
@@ -56,16 +60,16 @@ const InputGroupContext = React.createContext<InputGroupContextType>({
 });
 
 export const InputGroup: React.FunctionComponent<InputGroupProps> = ({
-  id,
-  label,
-  children,
-  error,
-  helpText,
-  hideLabel,
-  labelStyle,
-  labelTextStyle,
-  ...other
-}) => {
+                                                                       id,
+                                                                       label,
+                                                                       children,
+                                                                       error,
+                                                                       helpText,
+                                                                       hideLabel,
+                                                                       labelStyle,
+                                                                       labelTextStyle,
+                                                                       ...other
+                                                                     }) => {
   const uid = useUid(id);
   const theme = useTheme();
   const isDark = theme.colors.mode === "dark";
@@ -185,15 +189,15 @@ function getBaseStyles(theme: Theme) {
     ":focus": {
       boxShadow: dark
         ? focusShadow(
-            alpha(theme.colors.palette.blue.light, 0.5),
-            alpha(theme.colors.palette.gray.dark, 0.4),
-            alpha(theme.colors.palette.gray.light, 0.2)
-          )
+          alpha(theme.colors.palette.blue.light, 0.5),
+          alpha(theme.colors.palette.gray.dark, 0.4),
+          alpha(theme.colors.palette.gray.light, 0.2)
+        )
         : focusShadow(
-            alpha(theme.colors.palette.blue.dark, 0.1),
-            alpha(theme.colors.palette.gray.dark, 0.2),
-            alpha(theme.colors.palette.gray.dark, 0.05)
-          ),
+          alpha(theme.colors.palette.blue.dark, 0.1),
+          alpha(theme.colors.palette.gray.dark, 0.2),
+          alpha(theme.colors.palette.gray.dark, 0.05)
+        ),
       outline: "none"
     },
     ":disabled": {
@@ -292,7 +296,7 @@ export const InputBase: React.RefForwardingComponent<
 
 InputBase.propTypes = {
   inputSize: PropTypes.oneOf(["sm", "md", "lg"] as InputSize[]),
-  autoComplete: PropTypes.bool,
+  autoComplete: PropTypes.string,
   autoFocus: PropTypes.bool
 };
 
@@ -422,11 +426,11 @@ export interface LabelProps
  */
 
 export const Label: React.FunctionComponent<LabelProps> = ({
-  children,
-  hide,
-  textStyle,
-  ...other
-}) => {
+                                                             children,
+                                                             hide,
+                                                             textStyle,
+                                                             ...other
+                                                           }) => {
   const theme = useTheme();
   const child = (
     <label
@@ -462,6 +466,7 @@ export interface SelectProps
 
 /**
  * A styled select menu
+ * 若触摸屏 不支持multiple。
  */
 
 export const Select: React.FunctionComponent<SelectProps> = ({
@@ -510,8 +515,8 @@ export const Select: React.FunctionComponent<SelectProps> = ({
               WebkitAppearance: "none",
               display: "block",
               width: "100%",
-              lineHeight: theme.lineHeights.body,
-              height,
+              // lineHeight: theme.lineHeights.body,
+              height: multiple? 'unset': height,
               color: theme.colors.text.default,
               background: "transparent",
               fontFamily: theme.fonts.base,
@@ -519,7 +524,7 @@ export const Select: React.FunctionComponent<SelectProps> = ({
                 dark
                   ? alpha(theme.colors.palette.gray.lightest, 0.14)
                   : alpha(theme.colors.palette.gray.dark, 0.2)
-              } inset`,
+                } inset`,
               border: "none",
               backgroundClip: "padding-box",
               borderRadius: theme.radii.sm,
@@ -533,7 +538,7 @@ export const Select: React.FunctionComponent<SelectProps> = ({
                     dark
                       ? alpha(theme.colors.palette.gray.lightest, 0.15)
                       : alpha(theme.colors.palette.gray.dark, 0.12)
-                  } inset`
+                    } inset`
                 }
               },
               ":focus": {
@@ -607,7 +612,8 @@ export const Check: React.FunctionComponent<CheckProps> = ({
             {
               textAlign: 'left',
               display: "inline-flex",
-              alignItems: "center"
+              alignItems: "center",
+              width: "100%",
             },
             topDivStyle
           ]}
@@ -623,6 +629,7 @@ export const Check: React.FunctionComponent<CheckProps> = ({
             height: '2rem',
             width: '2rem',
             display: 'inline-flex',
+            paddingLeft: '1rem',
           },
         ]}
         {...other}

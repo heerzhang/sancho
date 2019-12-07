@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import { jsx } from "@emotion/core";
+import { jsx,css, SerializedStyles} from "@emotion/core";
 import * as React from "react";
 import { usePositioner } from "./Hooks/use-positioner";
 import { useUid } from "./Hooks/use-uid";
@@ -40,6 +40,8 @@ interface ComboBoxContextType {
   listId: string;
   query: string;
   autocomplete: boolean;
+  //传递头一个div样式
+  topDivStyle: SerializedStyles | undefined;
 }
 
 export const ComboBoxContext = React.createContext<ComboBoxContextType | null>(
@@ -55,6 +57,8 @@ export interface ComboBoxProps {
   query: string;
   onQueryChange: (value: string) => void;
   autocomplete?: boolean;
+  //外部传入模式的样式，设置第一层的元素。
+  topDivStyle?: SerializedStyles;
 }
 
 export const ComboBox: React.FunctionComponent<ComboBoxProps> = ({
@@ -62,7 +66,8 @@ export const ComboBox: React.FunctionComponent<ComboBoxProps> = ({
   onSelect,
   autocomplete = false,
   query,
-  onQueryChange
+  onQueryChange,
+  topDivStyle
 }) => {
   const inputRef = React.useRef(null);
   const listRef = React.useRef(null);
@@ -259,7 +264,8 @@ export const ComboBox: React.FunctionComponent<ComboBoxProps> = ({
         expanded,
         inputSize: inputSize.bounds,
         query,
-        autocomplete
+        autocomplete,
+        topDivStyle,
       }}
     >
       {children}
@@ -277,6 +283,7 @@ export interface ComboBoxInputProps extends React.HTMLAttributes<any> {
   [key: string]: any;
 }
 
+//分解配套的模式ComboBoxInput必需加到ComboBox底下的，ComboBox本身没有实际的div元素,靠context管理传递参数。
 export const ComboBoxInput: React.FunctionComponent<ComboBoxInputProps> = ({
   component: Component = InputBase,
   ...other
@@ -287,7 +294,7 @@ export const ComboBoxInput: React.FunctionComponent<ComboBoxInputProps> = ({
   if (!context) {
     throw new Error("ComboBoxInput must be wrapped in a ComboBox component");
   }
-
+  //这里topDivStyle样式从上级组件ComboBox以共享同一个context模式传递的，算是第二次传递。
   const {
     onKeyDown,
     makeHash,
@@ -299,7 +306,8 @@ export const ComboBoxInput: React.FunctionComponent<ComboBoxInputProps> = ({
     handleFocus,
     onInputChange,
     listId,
-    inputRef
+    inputRef,
+    topDivStyle
   } = context;
 
   /** support autocomplete on selection */
@@ -329,6 +337,11 @@ export const ComboBoxInput: React.FunctionComponent<ComboBoxInputProps> = ({
       aria-readonly
       aria-autocomplete="list"
       role="textbox"
+      css={[
+        {
+        },
+        topDivStyle
+      ]}
       aria-activedescendant={selected ? makeHash(selected) : undefined}
       {...safeBind(
         {
@@ -404,7 +417,8 @@ export const ComboBoxList: React.FunctionComponent<ComboBoxListProps> = ({
               (inputSize.right - inputSize.width) +
               "px",
             margin: 0,
-            padding: 0
+            padding: 0,
+            zIndex: theme.zIndices.overlay,
           }}
           {...safeBind(
             {
