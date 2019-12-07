@@ -13,6 +13,7 @@ import { IconAlertCircle, IconChevronDown } from "./Icons";
 import { safeBind } from "./Hooks/compose-bind";
 import { useMedia } from "use-media";
 
+
 /*
 自适应布局，容器父组件不应当设置width固定的px，否则内部组件元素{已经为屏幕宽度自适应适配的组件}都会被动拉伸宽度，失去了效果。
 */
@@ -465,8 +466,8 @@ export interface SelectProps
 }
 
 /**
- * A styled select menu
- * 若触摸屏 不支持multiple。
+ * A styled select
+ * 若触摸屏 不能支持multiple形态的的Select，只能单选。
  */
 
 export const Select: React.FunctionComponent<SelectProps> = ({
@@ -486,7 +487,7 @@ export const Select: React.FunctionComponent<SelectProps> = ({
   };
   const dark = theme.colors.mode === "dark";
   const height = getHeight(inputSize);
-
+  //因需要Select组件的max-width；导致Select若放InputGroupLine下在宽松模式一行内显示Label和Select的场景，在Select组件头层div设置宽度将会使得flex无法对齐两个项目；所以再套入一个div。
   return (
     <div  css={[
       {
@@ -499,9 +500,8 @@ export const Select: React.FunctionComponent<SelectProps> = ({
         className="Select"
         css={[
           {
+            //这个position: "relative"因为其下级的position: "absolute"定位的小小图标所约束。所以只能relative或sticky其他position取值不行。
             position: "relative",
-            display: 'inline-flex',
-            width: '100%'
           },
           divStyle,
         ]}
@@ -610,10 +610,10 @@ export const Check: React.FunctionComponent<CheckProps> = ({
     <div  className="Check"
           css={[
             {
-              textAlign: 'left',
-              display: "inline-flex",
+              //  textAlign: 'left',
+              display: "flex",
               alignItems: "center",
-              width: "100%",
+              //  width: "100%",
             },
             topDivStyle
           ]}
@@ -655,67 +655,62 @@ Check.propTypes = {
 };
 
 
-//新增加 带单位标注的输入框
+//带单位标注的输入框
 export interface SuffixInputProps
-  extends React.InputHTMLAttributes<HTMLInputElement> {
-  hide?: boolean;
+  extends InputBaseProps {
   textStyle?: SerializedStyles;
-  /** The size of the input element */
-  inputSize?: InputSize;
-  topDivStyle?: SerializedStyles;
 }
 
 /**
  * A styled Label to go along with input elements
  * 若children有，就是有附带单位后缀串的模式；
  * 带单位后缀的说明，70%给输入框，后面30%给叙述单位字串{空格也算}
+ * 输入的 单位说明 字符串 放在 <Text className="Suffix__text"  >
  */
-  //输入的 单位说明 字符串 放在 <Text className="Suffix__text"  >
 export const SuffixInput: React.FunctionComponent<SuffixInputProps> = ({
                                                                          children,
-                                                                         hide,
                                                                          textStyle,
                                                                          inputSize,
                                                                          topDivStyle,
                                                                          ...other
                                                                        }) => {
-    const theme = useTheme();
-    return (
-      <div  css={[
-        {
-          textAlign: 'left'
-          //display: "inline-block",
-        },
-        topDivStyle
-      ]}
+  const theme = useTheme();
+  return (
+    <div  css={[
+      {
+        textAlign: 'left'
+        //display: "inline-block",
+      },
+      topDivStyle
+    ]}
+    >
+      <InputBase inputSize={inputSize}
+                 css={{
+                   display: "inline-block",
+                   width:  children? "70%" : '100%',
+                 }}
+                 {...other}
       >
-        <InputBase inputSize={inputSize}
-                   css={{
-                     display: "inline-block",
-                     width:  children? "70%" : '100%',
-                   }}
-                   {...other}
-        >
-        </InputBase>
-        <Text className="Suffix__text" variant={"subtitle"}
-              css={[
-                {
-                  display: children? "inline-flex" : 'none',
-                  paddingLeft: '0.2rem'
-                },
-                textStyle
-              ]}
-        >
-          {children}
-        </Text>
-      </div>
-    );
-  };
+      </InputBase>
+      <Text className="Suffix__text" variant={"subtitle"}
+            css={[
+              {
+                display: children? "inline-flex" : 'none',
+                paddingLeft: '0.2rem'
+              },
+              textStyle
+            ]}
+      >
+        {children}
+      </Text>
+    </div>
+  );
+};
 
 SuffixInput.propTypes = {
-  hide: PropTypes.bool,
   children: PropTypes.node
 };
+
 
 export interface InputGroupLineProps extends InputGroupProps {
   //对一整行的控制
@@ -723,8 +718,11 @@ export interface InputGroupLineProps extends InputGroupProps {
   //根据换行px数 ，来切换显示2个显示模式。 缺省>=360px 正常模式，否则紧凑模式。
   switchPx?: number;
 }
-
-//修改InputGroup排版模式; 并排模式，根据屏幕自适应。支持 2 个模式的布局安排结构。
+/*
+自适应屏幕flexBox布局：不要设置固定的width和min-width，可以设置max-width；根据屏幕宽策划1列2列还是更多列的并列，或是更高层次嵌套或隐藏或显示一小半边天区域。
+不要对InputGroupLine的上一级div定义固定宽度，自适应和固定width: px只能二者选其一；宽度定了对小屏幕场景就有滚动条，而不是自适应缩小flexBox布局。
+修改InputGroup排版模式; 并排模式，根据屏幕自适应。支持 2 个模式的布局安排结构。
+*/
 export const InputGroupLine: React.FunctionComponent<InputGroupLineProps> = ({
                                                                                id,
                                                                                label,
@@ -745,7 +743,7 @@ export const InputGroupLine: React.FunctionComponent<InputGroupLineProps> = ({
     ? theme.colors.intent.danger.light
     : theme.colors.intent.danger.base;
 
-  //根据外部程序制定的px数，来决定用哪一个模式布局。
+  //根据外部程序制定的px数，来决定用哪一个模式布局。紧凑的是2行显示；宽松的是并列在同一行。
   const fitable = useMedia({ minWidth: `${switchPx}px` });
 
   const labelDivCss = css({
@@ -753,7 +751,8 @@ export const InputGroupLine: React.FunctionComponent<InputGroupLineProps> = ({
     paddingRight: '0.8rem'
   }, labelTextStyle);
 
-  const childNodeVar =   (
+  //InputGroupLine包裹的下层的顶级组件的样式修改：下层顶级元素的display: block还算兼容可用; 但width: 100%影响较大。
+  const childNodeVar = (
     <InputGroupContext.Provider
       value={{
         uid,
@@ -861,6 +860,7 @@ InputGroupLine.propTypes = {
   helpText: PropTypes.string,
   error: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
   id: PropTypes.string,
+  switchPx: PropTypes.number,
   children: PropTypes.node
 };
 
