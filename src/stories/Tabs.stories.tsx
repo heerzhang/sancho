@@ -316,7 +316,7 @@ function ParentSwipe() {
           borderRadius: 0,
           maxWidth: "100vw",
           overflow: "hidden",
-          [theme.mediaQueries.sm]: {
+          [theme.mediaQueries.md]: {
             maxWidth: "450px",
             borderRadius: theme.radii.lg
           }

@@ -81,7 +81,7 @@ export const Dialog: React.FunctionComponent<DialogProps> = ({
                       margin: "16px",
                       width: "calc(100% - 32px)",
                       outline: "none",
-                      [theme.mediaQueries.sm]: {
+                      [theme.mediaQueries.md]: {
                         maxWidth: "500px",
                         margin: "30px auto"
                       },
@@ -97,10 +97,6 @@ export const Dialog: React.FunctionComponent<DialogProps> = ({
                       height: "100vh",
                       borderRadius: 0,
                       boxShadow: "none",
-                      [theme.mediaQueries.sm]: {
-                        maxWidth: "none",
-                        margin: "0"
-                      },
                       [theme.mediaQueries.md]: {
                         maxWidth: "500px",
                         margin: "30px auto",

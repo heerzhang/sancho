@@ -207,7 +207,7 @@ export const TableCell: React.FunctionComponent<TableCellProps> = ({
               : theme.colors.border.default,
           display: "table-cell",
           padding: `${theme.spaces.xs} ${theme.spaces.sm}`,
-          [theme.mediaQueries.md]: {
+          [theme.mediaQueries.lg]: {
             paddingLeft: theme.spaces.md,
             paddingRight: theme.spaces.md
           },

@@ -204,12 +204,6 @@ export const MenuItem: React.FunctionComponent<MenuItemProps> = ({
       css={[
         {
           cursor: "pointer",
-          padding: `calc(${theme.spaces.sm} + 0.25rem) calc(${
-            theme.spaces.md
-          } + 0.25rem)`,
-          [theme.mediaQueries.sm]: {
-            padding: `${theme.spaces.sm} ${theme.spaces.md}`
-          },
           opacity: disabled ? 0.3 : 1,
           display: "flex",
           textDecoration: "none",
@@ -223,8 +217,18 @@ export const MenuItem: React.FunctionComponent<MenuItemProps> = ({
           ":focus:not([data-focus-visible-added])": {
             outline: "none"
           },
+          padding: `${theme.spaces.sm} ${theme.spaces.md}` ,
+          [theme.mediaQueries.sm]: {
+            padding: `${theme.spaces.none} ${theme.spaces.none}`
+          },
           [theme.mediaQueries.md]: {
+            padding: `calc(${theme.spaces.sm} + 0.25rem) calc(${theme.spaces.md} + 0.25rem)`,
+          },
+          [theme.mediaQueries.lg]: {
             padding: `${theme.spaces.xs} ${theme.spaces.md}`
+          },
+          [theme.mediaQueries.xl]: {
+            padding: `${theme.spaces.sm} ${theme.spaces.lg}`
           }
         },
         hover && {

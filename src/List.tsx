@@ -82,7 +82,7 @@ export const ListItem: React.FunctionComponent<ListItemProps> = ({
           background: "transparent",
           WebkitTapHighlightColor: "transparent",
           transition: "background 0.07s ease",
-          [theme.mediaQueries.md]: {
+          [theme.mediaQueries.lg]: {
             paddingLeft: theme.spaces.lg,
             paddingRight: theme.spaces.lg
           },
@@ -206,7 +206,7 @@ export const ListSection: React.FunctionComponent<ListSectionProps> = ({
           padding: theme.spaces.sm,
           paddingLeft: theme.spaces.md,
           marginTop: theme.spaces.md,
-          [theme.mediaQueries.md]: {
+          [theme.mediaQueries.lg]: {
             paddingLeft: theme.spaces.lg,
             paddingRight: theme.spaces.lg
           }

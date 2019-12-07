@@ -15,6 +15,8 @@ import { useGestureResponder, StateType } from "react-gesture-responder";
 
 export const RequestCloseContext = React.createContext(() => { });
 
+//底下css``的媒体查询${theme.mediaQueries.md} { } 是原生的语法；不是emotion对象的写法。
+
 const positions = (theme: Theme) => ({
   left: css`
     top: 0;
