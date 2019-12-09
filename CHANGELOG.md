@@ -1,3 +1,7 @@
+## 4.0.0
+- Compare the old and new versions, and modify theme.mediaqueries. Old version SM > = 567, MD > = 768, LG > = 992, XL > = 1200. But the new version SM < = 319, MD > = 629, LG > = 1120, XL > = 1440. The new version defaults to 320 to 628px, which just fits the width of the phone.
+
+- 新旧版本比较，对theme.mediaQueries.进行修改。旧版本sm>=567,md>=768,lg>=992,xl>=1200。但是新版本sm<=319,md>=629,lg>=1120,xl>=1440。新版本缺省值320到628px，正好适配手机宽度。
 ## 3.6.0
 - InputGroup 大幅度修改，支持自适应。
 ## 3.5.4

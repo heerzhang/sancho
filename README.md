@@ -3,7 +3,7 @@
     <img
     max-width="600px"
     alt="Sancho is a responsive and accessible design system built with React, Typescript and Emotion. Named after the ever-faithful, hilariously acerbic sidekick of Don Quixote, Sancho is designed to help you no matter how quixotic your dreams may be."
-     src="https://raw.githubusercontent.com/bmcmahen/sancho/master/hero.jpg">
+     src="https://raw.githubusercontent.com/heerzhang/sancho/master/hero.jpg">
   </a>
 </div>
 <br />
@@ -56,7 +56,7 @@ function MyApp() {
     <img
     max-width="600px"
     alt="Julienne screenshot showing a list of recipes on the left, and a recipe on the right."
-     src="https://raw.githubusercontent.com/bmcmahen/sancho/master/misc/julienne.jpg">
+     src="https://raw.githubusercontent.com/heerzhang/sancho/master/misc/julienne.jpg">
   </a>
 </div>
 <br />
@@ -70,7 +70,7 @@ function MyApp() {
     <img
     max-width="600px"
     alt="Captioner screenshot showing a user adding subtitles to the Godfather movie."
-     src="https://raw.githubusercontent.com/bmcmahen/sancho/master/misc/captioner.jpg">
+     src="https://raw.githubusercontent.com/heerzhang/sancho/master/misc/captioner.jpg">
   </a>
 </div>
 <br />
@@ -80,7 +80,7 @@ function MyApp() {
 ## Development
 
 ```
-git clone https://github.com/bmcmahen/sancho.git
+git clone https://github.com/heerzhang/sancho.git
 cd sancho
 yarn
 yarn run storybook

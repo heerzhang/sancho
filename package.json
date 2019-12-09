@@ -1,6 +1,6 @@
 {
   "name": "customize-easy-ui-component",
-  "version": "3.6.1-alpha",
+  "version": "4.0.0-alpha",
   "license": "MIT",
   "main": "cjs/index.js",
   "module": "esm/index.js",
@@ -8,7 +8,7 @@
   "author": "Ben McMahen <ben.mcmahen@gmail.com>",
   "homepage": "https://sancho-ui.com",
   "bugs": {
-    "url": "https://github.com/bmcmahen/sancho/issues"
+    "url": "https://github.com/heerzhang/sancho/issues"
   },
   "maintainers": [
     {
@@ -18,7 +18,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/bmcmahen/sancho.git"
+    "url": "https://github.com/heerzhang/sancho.git"
   },
   "dependencies": {
     "@reach/alert": "^0.1.2",
