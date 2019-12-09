@@ -7,10 +7,19 @@ import { useTheme } from "./Theme/Providers";
 export const useResponsiveContainerPadding = () => {
   const theme = useTheme();
   return css({
-    padding: `0 ${theme.spaces.md}`,
-    [theme.mediaQueries.lg]: {
-      padding: `0 ${theme.spaces.lg}`
-    }
+        padding: `0 ${theme.spaces.xs}`,
+        [theme.mediaQueries.sm]: {
+          padding: `0 ${theme.spaces.none}`
+        },
+        [theme.mediaQueries.md]: {
+          padding: `0 ${theme.spaces.sm}`
+        },
+        [theme.mediaQueries.lg]: {
+          padding: `0 ${theme.spaces.md}`
+        },
+        [theme.mediaQueries.xl]: {
+          padding: `0 ${theme.spaces.lg}`
+        }
   });
 };
 
