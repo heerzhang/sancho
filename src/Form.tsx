@@ -468,6 +468,7 @@ export interface SelectProps
 /**
  * A styled select
  * 若触摸屏 不能支持multiple形态的的Select，只能单选。
+ * multiple 只是摊开选择列表，onChange  .target.value无法提供多选数组，必须额外维护可以多选的被选中状态和数据数组。
  */
 
 export const Select: React.FunctionComponent<SelectProps> = ({
