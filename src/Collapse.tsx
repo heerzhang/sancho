@@ -32,7 +32,7 @@ export function useCollapse(defaultShow: boolean = false, press:boolean=false) {
   };
 }
 
-interface CollapseProps extends React.HTMLAttributes<HTMLDivElement> {
+interface AnimateCollapseProps extends React.HTMLAttributes<HTMLDivElement> {
   /** A unique id required for accessibility purposes. */
   id: string;
   /** Controls whether the children should be visible */
@@ -40,21 +40,19 @@ interface CollapseProps extends React.HTMLAttributes<HTMLDivElement> {
   /** Any element that you want to reveal */
   children: React.ReactNode;
   divStyle?: SerializedStyles;
-  noAnimated?: boolean;
 }
 
 /**
  * Hide and reveal content with an animation. Supports dynamic
  * heights.
  */
-export const Collapse: React.FunctionComponent<CollapseProps> = ({
-  children,
-  id,
-  show,
-  divStyle,
-  noAnimated =false,
-  ...other
-}) => {
+export const AnimateCollapse: React.FunctionComponent<AnimateCollapseProps> = ({
+                                                                   children,
+                                                                   id,
+                                                                   show,
+                                                                   divStyle,
+                                                                   ...other
+                                                                 }) => {
   const ref = React.useRef<HTMLDivElement | null>(null);
   const { bounds } = useMeasure(ref);
   const prevShow = usePrevious(show);
@@ -69,39 +67,23 @@ export const Collapse: React.FunctionComponent<CollapseProps> = ({
     immediate: prevShow !== null && prevShow === show
   }) as any;
   //实际打印预览会捕获3次的render这里，Collapse-捕获height=，前面2次纸张缩放调整，缩小了，div就会变矮化，后面第三次却是屏幕的。
-  //只好先预留大一点的高度。 有待改进。
+  //只好先预留大一点的高度。 有待改进。动画可能切割打印。
   const dynamicHeight = (bounds.height > (height&&height.value)) ? (bounds.height): (height&&height.value)>0? (height&&height.value) : undefined;
 
   return (
-    <React.Fragment>
-    {
-      noAnimated? (
-        <div
-          id={id}
-          css={{
-            display: show ?  undefined : 'none',
-            overflow: "hidden",
-          }}
-          {...other}
-          >
-          <div ref={ref}  css={divStyle} >{children}</div>
-        </div>
-        )
-        :
-        (
         <div  css={[
-           {
-             height: show? dynamicHeight : 0,
-             ["@media not print"]: {
-               display: show ?  undefined : 'none',
-             },
-             ["@media print"]: {
-               overflow: "hidden",
-             },
-           },
-         ]}
+          {
+            height: show? dynamicHeight : 0,
+            ["@media not print"]: {
+              display: show ?  undefined : 'none',
+            },
+            ["@media print"]: {
+              overflow: "hidden",
+            },
+          },
+        ]}
         >
-           <animated.div
+          <animated.div
             id={id}
             style={{ height } as any}
             css={{
@@ -110,10 +92,62 @@ export const Collapse: React.FunctionComponent<CollapseProps> = ({
             {...other}
           >
 
-             <div ref={ref}  css={divStyle} >{children}</div>
+            <div ref={ref}  css={divStyle} >{children}</div>
 
           </animated.div>
         </div>
+  );
+};
+
+interface CollapseProps extends React.HTMLAttributes<HTMLDivElement> {
+  /** A unique id required for accessibility purposes. */
+  id: string;
+  /** Controls whether the children should be visible */
+  show: boolean;
+  /** Any element that you want to reveal */
+  children: React.ReactNode;
+  divStyle?: SerializedStyles;
+  noAnimated?: boolean;
+}
+
+/**
+ * Hide and reveal content with an animation. Supports dynamic heights.
+ * 针对两种方式取舍display:'none', 和 show&& (<div>{children}</div>)比较，还是逻辑隐藏更好，若遇到耗时子组件时表现更好。
+ */
+export const Collapse: React.FunctionComponent<CollapseProps> = ({
+  children,
+  id,
+  show,
+  divStyle,
+  noAnimated =false,
+  ...other
+}) => {
+
+  return (
+    <React.Fragment>
+    {
+      noAnimated? (
+        <div
+          id={id}
+          aria-hidden={!show}
+          css={{
+            display: show ?  undefined : 'none',
+            overflow: "hidden",
+          }}
+          {...other}
+          >
+
+          { show&& (
+            <div  css={divStyle}> {children} </div>
+          ) }
+
+        </div>
+        )
+        :
+        (
+          <AnimateCollapse  id={id}  show={show}  divStyle={divStyle}>
+            {children}
+          </AnimateCollapse>
         )
     }
     </React.Fragment>
