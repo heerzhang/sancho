@@ -11,6 +11,7 @@ import { IconWrapper } from "./IconWrapper";
 import { useTouchable, OnPressFunction } from "touchable-hook";
 import cx from "classnames";
 import { safeBind } from "./Hooks/compose-bind";
+import { BreakPointType } from "./Theme/breakpoints";
 
 export type ButtonSize = "xs" | "sm" | "md" | "lg" | "xl";
 
@@ -26,11 +27,23 @@ export const getHeight = (size: ButtonSize) => {
   return "40px";
 };
 
-const getPadding = (size: ButtonSize) => {
-  if (size === "xs") return "0 0.5rem";
+const getPadding = (size: ButtonSize,screen:keyof BreakPointType) => {
+  if(screen==='sm'){
+    if (size === "xs") return "0 0.4rem";
+    if (size === "sm") return "0 0.4rem";
+    if (size === "lg") return "0 0.6rem";
+    if (size === "xl") return "0 0.6rem";
+  }
+  else if(screen==='lg'){
+    if (size === "xs") return "0 0.8rem";
+    if (size === "sm") return "0 1.2rem";
+    if (size === "lg") return "0 2rem";
+    if (size === "xl") return "0 3rem";
+  }
+  if (size === "xs") return "0 0.6rem";
   if (size === "sm") return "0 0.8rem";
-  if (size === "lg") return "0 1.5rem";
-  if (size === "xl") return "0 2.2rem";
+  if (size === "lg") return "0 1.1rem";
+  if (size === "xl") return "0 1.5rem";
   return "0 1rem";
 };
 
@@ -528,7 +541,14 @@ export const Button: React.RefForwardingComponent<
             fontFamily: theme.fonts.base,
             borderRadius: theme.radii.sm,
             fontSize: getFontSize(size, theme),
-            padding: getPadding(size),
+            padding: getPadding(size, 'default'),
+            [theme.mediaQueries.sm]: {
+              padding: getPadding(size, 'sm'),
+              whiteSpace: 'unset',
+            },
+            [theme.mediaQueries.lg]: {
+              padding: getPadding(size, 'lg'),
+            },
             height: getHeight(size),
             display: getDisplay(block),
             alignItems: "center",
