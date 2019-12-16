@@ -1,6 +1,6 @@
 {
   "name": "customize-easy-ui-component",
-  "version": "4.0.0-alpha",
+  "version": "4.0.1",
   "license": "MIT",
   "main": "cjs/index.js",
   "module": "esm/index.js",
