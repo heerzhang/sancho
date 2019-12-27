@@ -9,7 +9,9 @@ const genId = () => ++id;
  */
 
 export const useUid = (id: string = "") => {
-  const [generatedId, setGeneratedId] = useState<string>(id);
+  const [generatedId, setGeneratedId] = useState<string>( id || genId().toString() );
+  /**
   useEffect(() => setGeneratedId(id || genId().toString()), [id]);
+  **/
   return generatedId;
 };
