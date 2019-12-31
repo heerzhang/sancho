@@ -6,6 +6,7 @@ import PropTypes from "prop-types";
 import { useMeasure } from "./Hooks/use-measure";
 import { useUid } from "./Hooks/use-uid";
 import { useTheme } from "./Theme/Providers";
+import { Text } from "./Text";
 
 export function useCollapse(defaultShow: boolean = false, press:boolean=false) {
   const [show, setShow] = React.useState(defaultShow);
@@ -136,11 +137,9 @@ export const Collapse: React.FunctionComponent<CollapseProps> = ({
           }}
           {...other}
           >
-
-          { show&& (
-            <div  css={divStyle}> {children} </div>
-          ) }
-
+          <LazyToggleViewer show={show} css={divStyle}>
+           {children}
+          </LazyToggleViewer>
         </div>
         )
         :
@@ -167,3 +166,65 @@ export function usePrevious<T>(value: T) {
   }, [value]);
   return ref.current;
 }
+
+/* 比较优缺点：
+{ show  && toLoad }   逻辑&&方式加载快，恢复显示每次都得再render！适合展示概率不算大的内容。
+ display:'none' ,	 组件加载时慢，后面恢复显示就很快了，不会再render了！较适合大概率会呈现的内容。
+visibility:'hidden'   切换不浪费时间，但界面空间上被占用，适用性不好。
+*/
+interface LazyToggleViewerProps {
+  show: boolean;
+  children?: React.ReactNode;
+}
+//切换隐藏显示得内容： 初始化show=false情形=启动懒加载。是取长补短的模式。
+//若放在逻辑&&方式{show&&()}的组件下或路由后再进入呈现的子组件，就失去效果，父组件被要求重新渲染！就等于树的根节点决定枝条节点命运。
+//这样来看该组件放在层级太低的组件位置，可能没有意义，要搞就得放在较高组件层次的位置上。路由RouterLink本身就是逻辑&&方式的。
+export const LazyToggleViewer: React.FunctionComponent<LazyToggleViewerProps> = ({
+   show,
+   children,
+   ...other
+ }) => {
+  const prevDisp = usePrevious(show);
+  console.log("LazyToggleViewer 跑了how=[", prevDisp,  "]，eos是=", show );
+  if(prevDisp===null && !show)
+    return  null;
+  return (
+    <div
+      css={{display: show ? undefined : 'none'}}
+      {...other}
+    >
+      {children}
+    </div>
+  );
+};
+
+LazyToggleViewer.propTypes = {
+  children: PropTypes.node,
+  show: PropTypes.bool.isRequired
+};
+
+
+//性能测试专用的。
+export const TestRenderLoad: React.FunctionComponent = ({ ...other   }) => {
+  console.log("针对渲染次数做优化，性能测试专用的！");
+  return (
+    <div  css={{display: 'none'}}
+       {...other}
+    >
+      {
+        Array.from(new Array(3000)).map( (a,i)=>
+          {
+            return <Text>
+              {
+                Array.from(new Array(4)).map( (a,i)=>
+                  { return <Text>针对渲染次数做优化，性能测试专用的！</Text>}
+                )
+              }
+            </Text>
+          }
+        )
+      }
+    </div>
+  );
+};
+
