@@ -184,10 +184,15 @@ export const LazyToggleViewer: React.FunctionComponent<LazyToggleViewerProps> = 
    children,
    ...other
  }) => {
+  const [mounted, setMounted] = React.useState(false);
   const prevDisp = usePrevious(show);
-  console.log("LazyToggleViewer 跑了how=[", prevDisp,  "]，eos是=", show );
-  if(prevDisp===null && !show)
+  console.log("LazyToggleViewer 跑了how=[", prevDisp,  "]，eos是=", show ,"mounted=",mounted);
+  if((prevDisp===null || !mounted) && !show)
     return  null;
+  if(show && !mounted){
+    setMounted(true);
+    return  null;
+  }
   return (
     <div
       css={{display: show ? undefined : 'none'}}
