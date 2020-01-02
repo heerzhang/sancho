@@ -5,7 +5,7 @@
   "main": "cjs/index.js",
   "module": "esm/index.js",
   "typings": "esm/index.d.ts",
-  "author": "Ben McMahen <ben.mcmahen@gmail.com>",
+  "author": "heerzhang <herzhang@163.com>",
   "homepage": "https://sancho-ui.com",
   "bugs": {
     "url": "https://github.com/heerzhang/sancho/issues"

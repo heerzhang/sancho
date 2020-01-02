@@ -18,7 +18,7 @@ https://twitter.com/intent/follow?screen_name=benmcmahen
 </div>
 
 ## Features
-- The package is ported from Sancho and is currently for your own use only. 该包从sancho移植来的，目前仅供自己使用的。
+- This package is modified based on the previous Sancho migration；该包是基于前人的sancho移植来修改的。
 - Beautiful, generic components that you can make your own.
 - Highly responsive. Sancho takes mobile seriously, with built in support for gestures.
 - Accessible.
