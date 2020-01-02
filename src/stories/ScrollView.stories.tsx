@@ -5,7 +5,7 @@ import defaultTheme from "../Theme";
 import { IconActivity, IconAirplay, IconAlertOctagon } from "../Icons";
 import { useState, useRef } from "react";
 import { Pager } from "../Pager";
-import { ScrollView, ScrollViewHandles } from "../ScrollView";
+import {ScrollView, ScrollViewHandles} from "../ScrollView";
 import * as React from "react";
 import { Layer } from "../Layer";
 import { Toolbar } from "../Toolbar";
@@ -81,7 +81,7 @@ function AnimatedScroll() {
   }
 
   return (
-    <ScrollView css={{ height: "300px" }} overflowY ref={ref}>
+    <ScrollView css={{ height: "300px" }} overflowY  innerRef={ref}>
       <div css={{ height: "600px" }}>
         some scroll content
         <button onClick={scroll}>scroll to 300</button>

@@ -6,146 +6,161 @@ import { getDirection } from "./Sheet";
 import { useSpring, SpringConfig } from "react-spring";
 import PropTypes from "prop-types";
 import { safeBind } from "./Hooks/compose-bind";
+import {IconButton} from "./IconButton";
+
 
 export interface ScrollViewHandles {
-  scrollTo(x?: number, y?: number): void;
+    scrollTo(x?: number, y?: number): void;
 }
 
 export interface ScrollViewProps extends React.HTMLAttributes<HTMLDivElement> {
-  /** enable overflow-y scrolling */
-  overflowY?: boolean;
-  /** enable overflow-x scrolling */
-  overflowX?: boolean;
-  /** spring animation configuration */
-  scrollAnimationConfig?: SpringConfig;
-  /** access to ref dom element */
-  innerRef?: React.RefObject<any>;
+    /** enable overflow-y scrolling */
+    overflowY?: boolean;
+    /** enable overflow-x scrolling */
+    overflowX?: boolean;
+    /** spring animation configuration */
+    scrollAnimationConfig?: SpringConfig;
+    /** access to ref dom element　这个是内部嵌套的div的　 */
+    innerRef?: React.RefObject<any>;
+    /* 这个用于访问子组件scrollTo()的。 目的不一样 ; 为何两个都能访问？ Tabs用的却不行。
+      innerRef 转  .current!.scrollTo()；      对比于：
+      ref={scrollRef}   scrollRef = React.useRef<ScrollViewHandles>(null);       */
+    ref?: any;
+    /* 输出类型不一样的：用ref ={ } 是函数｛scrollTo()｝要通过useImperativeHandle定义的返回值{}访问,   ； 对比的，　
+     若是用innerRef ={外部ref传递} ,  是ＤＯＭ <div ...> 直接访问HTML 而不经过useImperativeHandle内的定义函数。*/
 }
+
+
 
 /**
  * A scroll view with some helpers, including:
  *  - smooth scrolling
  *  - gesture claiming
  * @param param0
- * @param componentRef
+ * @param componentRef  改成 ref
  */
 
-const ScrollViewForward: React.RefForwardingComponent<
-  ScrollViewHandles,
-  ScrollViewProps
-> = (
-  {
-    overflowY,
-    children,
-    overflowX,
-    innerRef,
-    scrollAnimationConfig = { tension: 190, friction: 15, mass: 0.2 },
-    ...other
-  },
-  componentRef
-) => {
-    const ref = React.useRef<HTMLDivElement>(null);
+//export const ScrollView= React.forwardRef(ScrollViewForward);   // 报警！嵌套RefForwardingComponent 的forwardRef;
 
-    /**
-     * A spring for animating scroll positions
-     */
+export const ScrollView: React.RefForwardingComponent<
+    ScrollViewHandles,
+    ScrollViewProps
+    > = React.forwardRef(
+    (
+        {
+            overflowY,
+            children,
+            overflowX,
+            innerRef,
+            scrollAnimationConfig = { tension: 190, friction: 15, mass: 0.2 },
+            ...other
+        } : ScrollViewProps,
+        ref
+    ) =>  {
+        const scrRef = React.useRef<HTMLDivElement>(null);
 
-    const [, setScroll] = useSpring(() => {
-      return {
-        config: scrollAnimationConfig,
-        from: { x: 0, y: 0 },
-        to: { x: 0, y: 0 },
-        onFrame: (animated: any) => {
-          if (overflowX && ref.current) {
-            ref.current.scrollLeft = animated.x;
-          }
+        /**
+         * A spring for animating scroll positions
+         */
 
-          if (overflowY && ref.current) {
-            ref.current!.scrollTop = animated.y;
-          }
-        }
-      };
-    });
+        const [, setScroll] = useSpring(() => {
+            return {
+                config: scrollAnimationConfig,
+                from: { x: 0, y: 0 },
+                to: { x: 0, y: 0 },
+                onFrame: (animated: any) => {
+                    if (overflowX && scrRef.current) {
+                        scrRef.current.scrollLeft = animated.x;
+                    }
 
-    /**
-     * Expose an imperate scrollTo method
-     */
-
-    React.useImperativeHandle(
-      componentRef,
-      () => ({
-        scrollTo: (x?: number, y?: number) => {
-          if (ref.current) {
-            const from = {
-              x: ref.current.scrollLeft,
-              y: ref.current.scrollTop
+                    if (overflowY && scrRef.current) {
+                        scrRef.current!.scrollTop = animated.y;
+                    }
+                }
             };
+        });
 
-            setScroll({
-              from,
-              to: { x, y },
-              reset: true
-            } as any);
-          }
-        }
-      }),
-      [setScroll]
-    );
+        /**
+         * Expose an imperate scrollTo method
+         */
 
-    /**
-     * Use a pan responder to determine if our scrollview should
-     * claim the responder (and cancel other gestures out). Only
-     * enabled on touch devices.
-     */
+        React.useImperativeHandle(
+            ref,
+            () => ({
+                scrollTo: (x?: number, y?: number) => {
+                    if (scrRef.current) {
+                        const from = {
+                            x: scrRef.current.scrollLeft,
+                            y: scrRef.current.scrollTop
+                        };
 
-    const { bind } = useGestureResponder(
-      {
-        onStartShouldSet: () => false,
-        onTerminationRequest: () => false, // once we claim it, we keep it
-        onMoveShouldSet: ({ initial, initialDirection, xy }) => {
-          if (initialDirection[0] !== 0 && overflowX) {
-            return true;
-          }
+                        setScroll({
+                            from,
+                            to: { x, y },
+                            reset: true
+                        } as any);
+                    }
+                }
+            }),
+            [setScroll]
+        );
 
-          if (initialDirection[1] !== 0 && overflowY) {
-            return true;
-          }
+        /**
+         * Use a pan responder to determine if our scrollview should
+         * claim the responder (and cancel other gestures out). Only
+         * enabled on touch devices.
+         */
 
-          return false;
-        }
-      },
-      {
-        enableMouse: false
-      }
-    );
+        const { bind } = useGestureResponder(
+            {
+                onStartShouldSet: () => false,
+                onTerminationRequest: () => false, // once we claim it, we keep it
+                onMoveShouldSet: ({ initial, initialDirection, xy }) => {
+                    if (initialDirection[0] !== 0 && overflowX) {
+                        return true;
+                    }
 
-    return (
-      <div className="ScrollView" {...other} {...bind}>
-        <div
-          className="ScrollView__scroll-containerr"
-          css={{
-            transform: "translateZ(0)",
-            overflowX: overflowX ? "scroll" : undefined,
-            overflowY: overflowY ? "scroll" : undefined,
-            WebkitOverflowScrolling: "touch"
-          }}
-          {...safeBind({ ref: innerRef }, { ref: ref }, other)}
-        >
-          {children}
-        </div>
-      </div>
-    );
-  };
+                    if (initialDirection[1] !== 0 && overflowY) {
+                        return true;
+                    }
 
-ScrollViewForward.propTypes = {
-  overflowY: PropTypes.number,
-  children: PropTypes.node,
-  overflowX: PropTypes.number,
-  scrollAnimationConfig: PropTypes.shape({
-    tension: PropTypes.number,
-    mass: PropTypes.number,
-    friction: PropTypes.number
-  })
+                    return false;
+                }
+            },
+            {
+                enableMouse: false
+            }
+        );
+
+        // 不可把innerRef?  与 ref?  都绑定到内部第二个div，scrRef上。
+
+        return (
+            <div className="ScrollView" {...other} {...bind}>
+                <div
+                    className="ScrollView__scroll-containerr"
+                    css={{
+                        transform: "translateZ(0)",
+                        overflowX: overflowX ? "scroll" : undefined,
+                        overflowY: overflowY ? "scroll" : undefined,
+                        WebkitOverflowScrolling: "touch"
+                    }}
+                    {...safeBind({ ref: innerRef }, { ref: scrRef }, other)}
+                >
+                    {children}
+                </div>
+            </div>
+        );
+    }
+);
+
+ScrollView.propTypes = {
+    overflowY: PropTypes.bool,
+    children: PropTypes.node,
+    overflowX: PropTypes.bool,
+    scrollAnimationConfig: PropTypes.shape({
+        tension: PropTypes.number,
+        mass: PropTypes.number,
+        friction: PropTypes.number
+    })
 };
 
-export const ScrollView = React.forwardRef(ScrollViewForward);
