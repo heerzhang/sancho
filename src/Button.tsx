@@ -473,6 +473,8 @@ export interface ButtonProps
   children: React.ReactNode;
   ref?: React.Ref<HTMLButtonElement>;
   component?: React.ReactType<any>;
+  //配合router路由使用的，跳转时unmount会导致报警。
+  noBind?:boolean;
   [key: string]: any; // bad hack to permit component injection
 }
 
@@ -500,6 +502,7 @@ export const Button: React.RefForwardingComponent<
       pressDelay = 0,
       pressExpandPx,
       onPress,
+      noBind=false,
       ...other
     }: ButtonProps,
     ref: React.Ref<any>
@@ -579,7 +582,7 @@ export const Button: React.RefForwardingComponent<
             paddingRight: "0.65rem"
           }
         ]}
-        {...safeBind(bind, { ref }, other)}
+        {... (noBind? safeBind( { ref }, other) : safeBind(bind, { ref }, other)  ) }
       >
         {loading && (
           <div
