@@ -79,11 +79,11 @@ export const InputGroup: React.FunctionComponent<InputGroupProps> = ({
     : theme.colors.intent.danger.base;
 
   return (
-    <div
+    <section
       className="InputGroup"
       css={{
         marginTop: theme.spaces.md,
-        ":first-child": {
+        "&.InputGroup:first-of-type": {
           marginTop: 0
         }
       }}
@@ -140,7 +140,7 @@ export const InputGroup: React.FunctionComponent<InputGroupProps> = ({
           {helpText}
         </Text>
       )}
-    </div>
+    </section>
   );
 };
 
