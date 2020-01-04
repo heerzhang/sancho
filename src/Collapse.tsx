@@ -216,10 +216,10 @@ export const TestRenderLoad: React.FunctionComponent = ({ ...other   }) => {
       {
         Array.from(new Array(3000)).map( (a,i)=>
           {
-            return <Text>
+            return <Text key={i}>
               {
                 Array.from(new Array(4)).map( (a,i)=>
-                  { return <Text>针对渲染次数做优化，性能测试专用的！</Text>}
+                  { return <Text key={i}>针对渲染次数做优化，性能测试专用的！</Text>}
                 )
               }
             </Text>
