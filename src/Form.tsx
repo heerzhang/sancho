@@ -770,11 +770,11 @@ export const InputGroupLine: React.FunctionComponent<InputGroupLineProps> = ({
   );
 
   return (
-    <div
-      className="InputGroup"
+    <section
+      className="InputGroupLine"
       css={{
         marginTop: theme.spaces.md,
-        ":first-child": {
+        "&.InputGroupLine:first-of-type": {
           marginTop: 0
         },
         textAlign: 'center'
@@ -851,7 +851,7 @@ export const InputGroupLine: React.FunctionComponent<InputGroupLineProps> = ({
           {helpText}
         </Text>
       )}
-    </div>
+    </section>
   );
 };
 
