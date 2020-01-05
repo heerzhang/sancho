@@ -205,21 +205,25 @@ LazyToggleViewer.propTypes = {
   show: PropTypes.bool.isRequired
 };
 
-
+interface TestRenderLoadProps {
+  loop?: number;
+  num?: number;
+  txt?: string;
+}
 //性能测试专用的。
-export const TestRenderLoad: React.FunctionComponent = ({ ...other   }) => {
-  console.log("针对渲染次数做优化，性能测试专用的！");
+export const TestRenderLoad: React.FunctionComponent<TestRenderLoadProps> = ({ loop=3000, num=4, txt='针对渲染次数做优化，性能测试专用的！', ...other   }) => {
+  console.log(txt);
   return (
     <div  css={{display: 'none'}}
        {...other}
     >
       {
-        Array.from(new Array(3000)).map( (a,i)=>
+        Array.from(new Array(loop)).map( (a,i)=>
           {
             return <Text key={i}>
               {
-                Array.from(new Array(4)).map( (a,i)=>
-                  { return <Text key={i}>针对渲染次数做优化，性能测试专用的！</Text>}
+                Array.from(new Array(num)).map( (a,i)=>
+                  { return <Text key={i}>{txt}</Text>}
                 )
               }
             </Text>
