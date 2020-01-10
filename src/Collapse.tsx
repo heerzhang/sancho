@@ -16,6 +16,10 @@ export function useCollapse(defaultShow: boolean = false, press:boolean=false) {
     setShow(!show);
   }
 
+  React.useEffect(() => {
+    setShow(defaultShow);
+  }, [defaultShow] );
+
   return {
     show,
     setShow,
