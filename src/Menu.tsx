@@ -181,7 +181,7 @@ export const MenuItem: React.FunctionComponent<MenuItemProps> = ({
   const closeParent = React.useContext(RequestCloseContext);
   const { focus, onKeyDown } = React.useContext(MenuListContext);
   const isLink = Component === "a" || other.href || other.to;
-
+  //touchable-hook底下,触发onScroll（）可能报错 unmount; dispatch<>按钮卸载也乱来。
   const { bind, hover, active } = useTouchable({
     onPress: select,
     disabled,
@@ -298,7 +298,6 @@ MenuItem.propTypes = {
   contentBefore: PropTypes.node,
   contentAfter: PropTypes.node,
   onPress: PropTypes.func,
-  onClick: PropTypes.func,
   className: PropTypes.string,
   role: PropTypes.string
 };
