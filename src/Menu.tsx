@@ -143,6 +143,7 @@ MenuList.propTypes = {
   focusableChildren: PropTypes.arrayOf(PropTypes.elementType)
 };
 
+
 interface MenuItemProps extends React.HTMLAttributes<Element> {
   /** Called when the menu item is selected. Generally use this instead of onClick. */
   onPress?: OnPressFunction;
@@ -181,9 +182,10 @@ export const MenuItem: React.FunctionComponent<MenuItemProps> = ({
   const closeParent = React.useContext(RequestCloseContext);
   const { focus, onKeyDown } = React.useContext(MenuListContext);
   const isLink = Component === "a" || other.href || other.to;
-  //touchable-hook底下,触发onScroll（）可能报错 unmount; dispatch<>按钮卸载也乱来。
+  //touchable-hook底下,触发onScroll（）可能报错 unmount; dispatch<> <- focus-trap()。
   const { bind, hover, active } = useTouchable({
     onPress: select,
+    terminateOnScroll: false,
     disabled,
     delay: 0,
     behavior: isLink ? "link" : "button"
@@ -258,7 +260,6 @@ export const MenuItem: React.FunctionComponent<MenuItemProps> = ({
             if (onKeyDown) onKeyDown(e);
           },
           onClick: (e: React.MouseEvent) => {
-            select();
             e.stopPropagation();
           }
         },
@@ -289,6 +290,7 @@ export const MenuItem: React.FunctionComponent<MenuItemProps> = ({
     </Component>
   );
 };
+
 
 MenuItem.propTypes = {
   onSelect: PropTypes.func,
