@@ -146,8 +146,10 @@ MenuList.propTypes = {
 interface MenuItemProps extends React.HTMLAttributes<Element> {
   /** Called when the menu item is selected. Generally use this instead of onClick. */
   onPress?: OnPressFunction;
+  onClick?: (e: React.MouseEvent<HTMLElement>) => void;
   /** Disable this menu item */
   disabled?: boolean;
+  noBind?: boolean;
   /** Pass in a string to use standard text styles. Otherwise, pass in any other node. */
   children: React.ReactNode;
   /** Provide a custom component. Eg., ReactRouter Link */
@@ -159,17 +161,20 @@ interface MenuItemProps extends React.HTMLAttributes<Element> {
   [key: string]: any;
 }
 
+//类似Button处理。 Can't perform a React state update on an unmounted；手机onPress onClick。估计useTouchable有毛病。
 export const MenuItem: React.FunctionComponent<MenuItemProps> = ({
-  contentBefore,
-  contentAfter,
-  onPress = noOp,
-  className = "",
-  component: Component = "div",
-  role = "menuitem",
-  children,
-  disabled,
-  ...other
-}) => {
+                                                                   contentBefore,
+                                                                   contentAfter,
+                                                                   onPress = noOp,
+                                                                   className = "",
+                                                                   component: Component = "div",
+                                                                   role = "menuitem",
+                                                                   noBind=true,
+                                                                   children,
+                                                                   disabled,
+                                                                   onClick,
+                                                                   ...other
+                                                                 }) => {
   const theme = useTheme();
   const dark = theme.colors.mode === "dark";
   const localRef = React.useRef<HTMLDivElement>(null);
@@ -190,6 +195,7 @@ export const MenuItem: React.FunctionComponent<MenuItemProps> = ({
     }
   }, [focus, localRef]);
 
+  //必须，onPress+ 原生onClick；
   function select() {
     onPress();
     closeParent();
@@ -250,6 +256,10 @@ export const MenuItem: React.FunctionComponent<MenuItemProps> = ({
           onKeyDown: (e: React.KeyboardEvent) => {
             e.stopPropagation();
             if (onKeyDown) onKeyDown(e);
+          },
+          onClick: (e: React.MouseEvent) => {
+            select();
+            e.stopPropagation();
           }
         },
         other
@@ -288,6 +298,7 @@ MenuItem.propTypes = {
   contentBefore: PropTypes.node,
   contentAfter: PropTypes.node,
   onPress: PropTypes.func,
+  onClick: PropTypes.func,
   className: PropTypes.string,
   role: PropTypes.string
 };
