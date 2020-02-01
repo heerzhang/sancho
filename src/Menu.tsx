@@ -250,9 +250,6 @@ export const MenuItem: React.FunctionComponent<MenuItemProps> = ({
           onKeyDown: (e: React.KeyboardEvent) => {
             e.stopPropagation();
             if (onKeyDown) onKeyDown(e);
-          },
-          onClick:(e: React.MouseEvent) => {
-              select();
           }
         },
         other
