@@ -21,38 +21,42 @@ const getTextColor = (background: string, theme: Theme) => {
 
 export const getHeight = (size: ButtonSize) => {
   if (size === "xs") return "25px";
-  if (size === "sm") return "30px";
-  if (size === "lg") return "48px";
-  if (size === "xl") return "60px";
-  return "40px";
+  else if (size === "sm") return "30px";
+  else if (size === "lg") return "48px";
+  else if (size === "xl") return "60px";
+  else return "40px";
 };
 
 const getPadding = (size: ButtonSize,screen:keyof BreakPointType) => {
   if(screen==='sm'){
-    if (size === "xs") return "0 0.4rem";
-    if (size === "sm") return "0 0.4rem";
-    if (size === "lg") return "0 0.6rem";
-    if (size === "xl") return "0 0.6rem";
+    if (size === "xs") return "0 0.3rem";
+    else if (size === "sm") return "0 0.4rem";
+    else if (size === "lg") return "0 0.6rem";
+    else if (size === "xl") return "0 0.7rem";
+    else return "0 0.5rem";
   }
   else if(screen==='lg'){
-    if (size === "xs") return "0 0.8rem";
-    if (size === "sm") return "0 1.2rem";
-    if (size === "lg") return "0 2rem";
-    if (size === "xl") return "0 3rem";
+    if (size === "xs") return "0 0.6rem";
+    else if (size === "sm") return "0 0.8rem";
+    else if (size === "lg") return "0 1.2rem";
+    else if (size === "xl") return "0 1.4rem";
+    return "0 1rem";
   }
-  if (size === "xs") return "0 0.6rem";
-  if (size === "sm") return "0 0.8rem";
-  if (size === "lg") return "0 1.1rem";
-  if (size === "xl") return "0 1.5rem";
-  return "0 1rem";
+  else {
+    if (size === "xs") return "0 0.5rem";
+    else if (size === "sm") return "0 0.6rem";
+    else if (size === "lg") return "0 1rem";
+    else if (size === "xl") return "0 1.1rem";
+    else return "0 0.8rem";
+  }
 };
 
 const getFontSize = (size: ButtonSize, theme: Theme) => {
   if (size === "xs") return theme.fontSizes[0];
-  if (size === "lg") return theme.fontSizes[2];
-  if (size === "sm") return theme.fontSizes[0];
-  if (size === "xl") return theme.fontSizes[3];
-  return theme.fontSizes[1];
+  else if (size === "lg") return theme.fontSizes[2];
+  else if (size === "sm") return theme.fontSizes[0];
+  else if (size === "xl") return theme.fontSizes[3];
+  else return theme.fontSizes[1];
 };
 
 const getDisplay = (block?: boolean) => (block ? "flex" : "inline-flex");
