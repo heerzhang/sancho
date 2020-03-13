@@ -6,6 +6,7 @@ import VisuallyHidden from "@reach/visually-hidden";
 import PropTypes from "prop-types";
 import { IconWrapper } from "./IconWrapper";
 import { IconX } from "./Icons";
+import { useTheme } from "./Theme/Providers";
 
 export interface IconButtonProps extends Partial<ButtonProps> {
   /** A label required for accessibility  */
@@ -36,12 +37,19 @@ export const IconButton: React.RefForwardingComponent<
     }: IconButtonProps,
     ref
   ) => {
+    const theme = useTheme();
     return (
       <Button
         ref={ref}
         size={size}
         css={{
           padding: 0,
+          [theme.mediaQueries.sm]: {
+            padding: 0,
+          },
+          [theme.mediaQueries.lg]: {
+            padding: 0,    //底层Button有设置[theme.xx.lg],这里就也得加[theme.xx.lg]，不然会被无情颠覆。优先级毛病？
+          },
           width: getHeight(size)
         }}
         onPress={onPress}
