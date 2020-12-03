@@ -59,7 +59,7 @@ export const Dialog: React.FunctionComponent<DialogProps> = ({
         <React.Fragment>
           {transitions((style, item) => {
             return (
-              <animated.div
+              item && <animated.div
                 key={1}
                 className="Dialog"
                 aria-modal="true"

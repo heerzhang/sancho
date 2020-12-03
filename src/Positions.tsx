@@ -65,7 +65,7 @@ export const Positioner: React.FunctionComponent<PositionsProps> = ({
       <Reference>{target}</Reference>
       {transitions((style, item) => {
         return (
-          <Portal key={1}>
+          item &&  <Portal key={1}>
             <Popper placement={placement} positionFixed={positionFixed}>
               {props => children(props, style as any)}
             </Popper>

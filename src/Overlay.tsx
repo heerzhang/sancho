@@ -37,8 +37,8 @@ export const Overlay: React.RefForwardingComponent<
       <Portal>
         {transitions((style, item) => {
           // @ts-ignore
-          return (
-            <div
+        return (
+      item &&  <div
               key={1}
               ref={ref}
               {...bind}
