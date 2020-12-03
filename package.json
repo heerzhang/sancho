@@ -1,6 +1,6 @@
 {
   "name": "customize-easy-ui-component",
-  "version": "4.1.8",
+  "version": "4.2.0",
   "license": "MIT",
   "main": "cjs/index.js",
   "module": "esm/index.js",
@@ -76,7 +76,8 @@
     "build-esm": "rimraf esm && tsc",
     "build-cjs": "rimraf cjs && tsc --module commonjs --outDir cjs",
     "build-umd": "rimraf umd && rollup -c",
-    "build": "yarn run build-esm && yarn run build-cjs && yarn run build-umd",
+    "build-old2": "yarn run build-esm && yarn run build-cjs && yarn run build-umd",
+    "build": "yarn run build-esm && yarn run build-cjs",
     "prepublishOnly": "yarn run build"
   },
   "eslintConfig": {
@@ -119,7 +120,7 @@
     "prettier": "^1.16.4",
     "react-scripts": "2.1.5",
     "rimraf": "^2.6.3",
-    "rollup": "^1.32.1",
+    "rollup": "^2.34.0",
     "rollup-plugin-cleanup": "^3.2.1",
     "@rollup/plugin-commonjs": "^17.0.0",
     "rollup-plugin-filesize": "^9.0.2",
