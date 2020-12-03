@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import { jsx } from "@emotion/core";
+import { jsx } from "@emotion/react";
 import * as React from "react";
 import { MenuList, MenuItem, MenuDivider, MenuLabel } from "../Menu";
 import { storiesOf } from "@storybook/react";

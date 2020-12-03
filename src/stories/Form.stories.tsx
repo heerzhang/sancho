@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import { jsx } from "@emotion/core";
+import { jsx } from "@emotion/react";
 import { InputGroup, Select, Input, TextArea, Check } from "../Form";
 import { Button } from "../Button";
 import theme from "../Theme";

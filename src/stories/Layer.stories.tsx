@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import { jsx } from "@emotion/core";
+import { jsx } from "@emotion/react";
 import * as React from "react";
 import { LayerElevations, Layer, LayerLoading } from "../Layer";
 import { storiesOf } from "@storybook/react";

@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import { jsx, Global } from "@emotion/core";
+import { jsx, Global } from "@emotion/react";
 import * as React from "react";
 import {
   StackTitle as Title,

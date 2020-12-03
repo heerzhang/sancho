@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import { jsx,css, SerializedStyles} from "@emotion/core";
+import { jsx,css, SerializedStyles} from "@emotion/react";
 import * as React from "react";
 import { usePositioner } from "./Hooks/use-positioner";
 import { useUid } from "./Hooks/use-uid";

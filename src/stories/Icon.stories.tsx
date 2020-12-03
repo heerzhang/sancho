@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import { jsx } from "@emotion/core";
+import { jsx } from "@emotion/react";
 import { storiesOf } from "@storybook/react";
 import defaultTheme from "../Theme";
 import { IconActivity, IconAirplay, IconAlertOctagon } from "../Icons";

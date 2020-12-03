@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import { jsx, css } from "@emotion/core";
+import { jsx, css } from "@emotion/react";
 import * as React from "react";
 import { Avatar, AvatarSizes } from "../Avatar";
 import faker from "faker";

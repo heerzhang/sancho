@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import { jsx } from "@emotion/core";
+import { jsx } from "@emotion/react";
 import theme from "../Theme";
 import { storiesOf } from "@storybook/react";
 import { Layer } from "../Layer";

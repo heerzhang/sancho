@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import { jsx, css, keyframes } from "@emotion/core";
+import { jsx, css, keyframes } from "@emotion/react";
 import * as React from "react";
 import VisuallyHidden from "@reach/visually-hidden";
 import PropTypes from "prop-types";

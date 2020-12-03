@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import { jsx, css, SerializedStyles } from "@emotion/core";
+import { jsx, css, SerializedStyles } from "@emotion/react";
 import * as React from "react";
 import { Button } from "../Button";
 import { Dialog } from "../Dialog";

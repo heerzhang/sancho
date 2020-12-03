@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import { jsx, Global, css } from "@emotion/core";
+import { jsx, Global, css } from "@emotion/react";
 import * as React from "react";
 import toaster, { Position } from "toasted-notes";
 import { Alert, AlertIntentions } from "./Alert";
