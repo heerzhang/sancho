@@ -37,7 +37,10 @@ export const Dialog: React.FunctionComponent<DialogProps> = ({
   ...other
 }) => {
   const theme = useTheme();
-  const transitions = useTransition(isOpen, null, {
+
+ // [TransitionFn<Item, State & object>, SpringStartFn<State>, SpringStopFn<State>]
+
+  const transitions = useTransition(isOpen,  {
     from: { opacity: 0, transform: "scale(0.9)" },
     enter: { opacity: 1, transform: "scale(1)" },
     leave: { opacity: 0, transform: "scale(0.9)" },
@@ -54,83 +57,82 @@ export const Dialog: React.FunctionComponent<DialogProps> = ({
     <React.Fragment>
       <Overlay onRequestClose={onRequestClose} isOpen={isOpen}>
         <React.Fragment>
-          {transitions.map(
-            ({ item, key, props: animationProps }) =>
-              item && (
-                <animated.div
-                  key={key}
-                  className="Dialog"
-                  aria-modal="true"
-                  ref={ref}
-                  tabIndex={-1}
-                  onClick={(e: React.MouseEvent) => {
-                    e.stopPropagation();
-                  }}
-                  style={
-                    {
-                      opacity: animationProps.opacity,
-                      transform: animationProps.transform
-                    } as any
-                  }
-                  css={[
-                    {
-                      zIndex: theme.zIndices.modal,
-                      background: theme.colors.background.default,
+          {transitions((style, item) => {
+            return (
+              <animated.div
+                key={1}
+                className="Dialog"
+                aria-modal="true"
+                ref={ref}
+                tabIndex={-1}
+                onClick={(e: React.MouseEvent) => {
+                  e.stopPropagation();
+                }}
+                style={
+                  {
+                    opacity: style.opacity,
+                    transform: style.transform
+                  } as any
+                }
+                css={[
+                  {
+                    zIndex: theme.zIndices.modal,
+                    background: theme.colors.background.default,
+                    boxShadow: theme.shadows.md,
+                    borderRadius: theme.radii.lg,
+                    margin: "16px",
+                    width: "calc(100% - 32px)",
+                    outline: "none",
+                    [theme.mediaQueries.md]: {
+                      maxWidth: "500px",
+                      margin: "30px auto"
+                    },
+                    [theme.mediaQueries.lg]: {
+                      maxWidth: "650px",
+                      margin: "30px auto"
+                    }
+                  },
+                  mobileFullscreen && {
+                    maxWidth: "none",
+                    margin: 0,
+                    width: "100vw",
+                    height: "100vh",
+                    borderRadius: 0,
+                    boxShadow: "none",
+                    [theme.mediaQueries.md]: {
+                      maxWidth: "500px",
+                      margin: "30px auto",
+                      height: "auto",
                       boxShadow: theme.shadows.md,
                       borderRadius: theme.radii.lg,
-                      margin: "16px",
-                      width: "calc(100% - 32px)",
-                      outline: "none",
-                      [theme.mediaQueries.md]: {
-                        maxWidth: "500px",
-                        margin: "30px auto"
-                      },
-                      [theme.mediaQueries.lg]: {
-                        maxWidth: "650px",
-                        margin: "30px auto"
-                      }
-                    },
-                    mobileFullscreen && {
-                      maxWidth: "none",
-                      margin: 0,
-                      width: "100vw",
-                      height: "100vh",
-                      borderRadius: 0,
-                      boxShadow: "none",
-                      [theme.mediaQueries.md]: {
-                        maxWidth: "500px",
-                        margin: "30px auto",
-                        height: "auto",
-                        boxShadow: theme.shadows.md,
-                        borderRadius: theme.radii.lg,
-                        width: "calc(100% - 32px)"
-                      }
+                      width: "calc(100% - 32px)"
                     }
-                  ]}
-                  {...other}
-                >
-                  <React.Fragment>
-                    {title && (
-                      <DialogHeader
-                        className="Dialog__header"
-                        css={{
-                          display: "flex",
-                          justifyContent: "space-between",
+                  }
+                ]}
+                {...other}
+              >
+                <React.Fragment>
+                  {title && (
+                    <DialogHeader
+                      className="Dialog__header"
+                      css={{
+                        display: "flex",
+                        justifyContent: "space-between",
 
-                          alignItems: "center",
-                          padding: `${theme.spaces.lg} ${theme.spaces.lg} 0 ${
-                            theme.spaces.lg
+                        alignItems: "center",
+                        padding: `${theme.spaces.lg} ${theme.spaces.lg} 0 ${
+                          theme.spaces.lg
                           }`
-                        }}
-                        title={title}
-                        onRequestClose={onRequestClose}
-                      />
-                    )}
-                    <div ref={scrollableRef}>{children}</div>
-                  </React.Fragment>
-                </animated.div>
-              )
-          )}
+                      }}
+                      title={title}
+                      onRequestClose={onRequestClose}
+                    />
+                  )}
+                  <div ref={scrollableRef}>{children}</div>
+                </React.Fragment>
+              </animated.div>
+            )
+          })}
         </React.Fragment>
       </Overlay>
     </React.Fragment>

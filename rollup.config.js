@@ -1,9 +1,9 @@
-import resolve from "rollup-plugin-node-resolve";
+import resolve from "@rollup/plugin-node-resolve";
 import filesize from "rollup-plugin-filesize";
-import commonjs from "rollup-plugin-commonjs";
+import commonjs from "@rollup/plugin-commonjs";
 import cleanup from "rollup-plugin-cleanup";
 import { uglify } from "rollup-plugin-uglify";
-import json from "rollup-plugin-json";
+import json from "@rollup/plugin-json";
 
 const input = "cjs/index.js";
 

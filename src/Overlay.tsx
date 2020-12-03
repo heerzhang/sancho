@@ -25,7 +25,7 @@ export const Overlay: React.RefForwardingComponent<
     ref: React.Ref<HTMLDivElement>
   ) => {
     const theme = useTheme();
-    const transitions = useTransition(isOpen, null, {
+    const transitions = useTransition(isOpen,  {
       from: { opacity: 0 },
       enter: { opacity: 1 },
       leave: { opacity: 0 }
@@ -35,53 +35,53 @@ export const Overlay: React.RefForwardingComponent<
 
     return (
       <Portal>
-        {transitions.map(
-          ({ item, key, props }) =>
-            item && (
-              <div
-                key={key}
-                ref={ref}
-                {...bind}
-                onClick={(e: React.MouseEvent) => {
+        {transitions((style, item) => {
+          // @ts-ignore
+          return (
+            <div
+              key={1}
+              ref={ref}
+              {...bind}
+              onClick={(e: React.MouseEvent) => {
+                e.stopPropagation();
+                onRequestClose();
+              }}
+              onKeyDown={(e: React.KeyboardEvent) => {
+                if (e.key === "Escape") {
                   e.stopPropagation();
                   onRequestClose();
-                }}
-                onKeyDown={(e: React.KeyboardEvent) => {
-                  if (e.key === "Escape") {
-                    e.stopPropagation();
-                    onRequestClose();
-                  }
-                }}
+                }
+              }}
+              css={{
+                bottom: 0,
+                left: 0,
+                overflow: "auto",
+                width: "100vw",
+                height: "100vh",
+                zIndex: theme.zIndices.overlay,
+                position: "fixed",
+                content: "''",
+                right: 0,
+                top: 0,
+                WebkitTapHighlightColor: "transparent"
+              }}
+            >
+              <animated.div
+                style={{ opacity: style.opacity }}
                 css={{
-                  bottom: 0,
-                  left: 0,
-                  overflow: "auto",
-                  width: "100vw",
-                  height: "100vh",
-                  zIndex: theme.zIndices.overlay,
-                  position: "fixed",
-                  content: "''",
-                  right: 0,
+                  position: "absolute",
                   top: 0,
-                  WebkitTapHighlightColor: "transparent"
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  background: theme.colors.background.overlay
                 }}
-              >
-                <animated.div
-                  style={{ opacity: props.opacity }}
-                  css={{
-                    position: "absolute",
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    bottom: 0,
-                    background: theme.colors.background.overlay
-                  }}
-                />
+              />
 
-                {children}
-              </div>
-            )
-        )}
+              {children}
+            </div>
+          )
+        })}
       </Portal>
     );
   }

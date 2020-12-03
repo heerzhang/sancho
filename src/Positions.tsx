@@ -52,8 +52,9 @@ export const Positioner: React.FunctionComponent<PositionsProps> = ({
   children,
   placement
 }) => {
-  const transitions = useTransition(isOpen, null, {
+  const transitions = useTransition(isOpen,  {
     from: { opacity: 1 },
+   // keys: item => item.key,
     enter: { opacity: 1 },
     leave: { opacity: 0 },
     config: { mass: 1, tension: 185, friction: 26 }
@@ -62,6 +63,17 @@ export const Positioner: React.FunctionComponent<PositionsProps> = ({
   return (
     <Manager>
       <Reference>{target}</Reference>
+      {transitions((style, item) => {
+        return (
+          <Portal key={1}>
+            <Popper placement={placement} positionFixed={positionFixed}>
+              {props => children(props, style as any)}
+            </Popper>
+          </Portal>
+        )
+      })}
+
+      {/*
       {transitions.map(
         ({ item, key, props: animatedProps }) =>
           item && (
@@ -72,6 +84,8 @@ export const Positioner: React.FunctionComponent<PositionsProps> = ({
             </Portal>
           )
       )}
+   */}
+
     </Manager>
   );
 };
