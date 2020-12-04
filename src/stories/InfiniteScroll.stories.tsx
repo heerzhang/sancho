@@ -18,7 +18,7 @@ import { useTheme } from "../Theme/Providers";
 function fetchdata() {
   return new Promise(resolve => {
     setTimeout(() => {
-      resolve();
+      resolve(void 0);
     }, 800);
   });
 }

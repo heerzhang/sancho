@@ -1,5 +1,4 @@
 /** @jsx jsx */
-/// <reference types="@emotion/react/types/css-prop" />
 import { jsx,css, SerializedStyles } from "@emotion/react";
 import * as React from "react";
 import { animated, useSpring } from "react-spring";
